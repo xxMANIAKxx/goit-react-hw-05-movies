@@ -24,19 +24,22 @@ export const fetchTrendingMovies = async () => {
 };
 
 export const getMovieCast = async movieId => {
-  const queryString = `movie/${movieId}/credits$?api_key={apiKey}&language=en-US`;
+  const queryString = `movie/${movieId}/credits$?api_key={KEY}&language=en-US`;
   const { data } = await axios.get(queryString);
   return data;
 };
 
+
 export const getReviews = async id => {
-  const response = await axios.get(`/movie/${id}/reviews?api_key=${KEY}`);
-  const { results } = response.data;
-  return results;
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${KEY}`
+  );
+
+  return response.data.results;
 };
 
 // export const getReviews = async movieId => {
-//   const queryString = `movie/${movieId}/reviews$?api_key={apiKey}&language=en-US`;
+//   const queryString = `movie/${movieId}/reviews$?api_key={KEY}&language=en-US`;
 //   const { data } = await axios.get(queryString);
 //   return data;
 // };
