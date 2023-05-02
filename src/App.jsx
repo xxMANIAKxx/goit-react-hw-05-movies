@@ -15,9 +15,6 @@ const MoviesPage = lazy(() =>
 const MovieDetailsPage = lazy(() =>
   import('./pages/MovieDetailsPage/MovieDetailsPage')
 );
-const Cast = lazy(() =>
-  import('./pages/MovieCastView')  
-);
 const Reviews = lazy(() =>
   import('./pages/MovieReview')
 );
@@ -30,23 +27,25 @@ export default function App() {
     <Container>
       <Navigation />
       <Suspense fallback={<Loader />}>
-        <Switch>
-          <Route exact path="/">
+         <Switch>
+          <Route path="/">
             <HomePage />
           </Route>
-          <Route exact path="/movies">
+          <Route path="/movies">
             <MoviesPage />
-          </Route>
+          </Route>  
           <Route path="/movies/:movieId">
             <MovieDetailsPage />
-          </Route>
-          <Route path="/movies/:movieId">
+            <Route path="cast">
             <MovieCastView />
+            </Route>
+            <Route path="reviews">
+              <Reviews />
+              </Route>
           </Route>
-
-          <Route>
-            <NotFoundView path="*" />
-          </Route>
+          <Route path="*">
+            <NotFoundView />
+            </Route>
         </Switch>
       </Suspense>
     </Container>
