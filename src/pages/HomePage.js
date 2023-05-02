@@ -40,14 +40,6 @@ const HomePage = () => {
                     },
                   }}
                 >
-                  {/* <img
-                  src={
-                    poster_path
-                      ? `https://image.tmdb.org/t/p/w300${poster_path}`
-                      : 'https://pomogaetsrazu.ru/images/offers/2829219234.jpg'
-                  }
-                  alt={title}
-                /> */}
                   <p>{title}</p>
                 </Link>
               </li>

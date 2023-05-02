@@ -1,22 +1,28 @@
-import { Route, Switch } from 'react-router-dom';
-import Navigation from './components/Navigation/Navigation';
 import { lazy, Suspense } from 'react';
+import { Route, Switch } from 'react-router-dom';
+
+import Navigation from './components/Navigation/Navigation';
 import Container from './components/Container/Container';
 import Loader from 'components/Loader/Loader';
+import MovieCastView from './pages/MovieCastView';
 
 const HomePage = lazy(() =>
-  import('./pages/HomePage' /* webpackChunkName:"HomePage" */)
+  import('./pages/HomePage')
 );
 const MoviesPage = lazy(() =>
-  import('./pages/MoviesPage' /* webpackChunkName:"MoviesPage" */)
+  import('./pages/MoviesPage')
 );
 const MovieDetailsPage = lazy(() =>
-  import(
-    './pages/MovieDetailsPage/MovieDetailsPage' /* webpackChunkName:"MovieDetailsPage" */
-  )
+  import('./pages/MovieDetailsPage/MovieDetailsPage')
+);
+const Cast = lazy(() =>
+  import('./pages/MovieCastView')  
+);
+const Reviews = lazy(() =>
+  import('./pages/MovieReview')
 );
 const NotFoundView = lazy(() =>
-  import('./pages/NotFoundView' /* webpackChunkName:"NotFoundView" */)
+  import('./pages/NotFoundView')
 );
 
 export default function App() {
@@ -33,6 +39,9 @@ export default function App() {
           </Route>
           <Route path="/movies/:movieId">
             <MovieDetailsPage />
+          </Route>
+          <Route path="/movies">
+            <MovieCastView />
           </Route>
 
           <Route>
