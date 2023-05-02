@@ -29,8 +29,14 @@ export const getMovieCast = async movieId => {
   return data;
 };
 
-export const getReviews = async movieId => {
-  const queryString = `movie/${movieId}/reviews$?api_key={apiKey}&language=en-US`;
-  const { data } = await axios.get(queryString);
-  return data;
+export const getReviews = async id => {
+  const response = await axios.get(`/movie/${id}/reviews?api_key=${KEY}`);
+  const { results } = response.data;
+  return results;
 };
+
+// export const getReviews = async movieId => {
+//   const queryString = `movie/${movieId}/reviews$?api_key={apiKey}&language=en-US`;
+//   const { data } = await axios.get(queryString);
+//   return data;
+// };
