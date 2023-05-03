@@ -1,36 +1,59 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
+const instance = axios.create({
+  baseURL: 'https://api.themoviedb.org/3',
+  params: {
+    api_key: '57e0b96b05e3b80d867b27d0f314d0f1',
+    language: 'en-US',
+  },
+});
 
-const KEY = '57e0b96b05e3b80d867b27d0f314d0f1';
-export const IMAGE_URL = 'https://image.tmdb.org/t/p/w500';
+export async function getTrendingMovies() {
+  const query = `/trending/movie/week`;
+  try {
+    const { data } = await instance.get(query);
+    return data.results;
+  } catch (error) {
+    throw error;
+  }
+}
 
-export const searchMovies = async stringToSearch => {
-  const queryString = `search/movie?api_key=${KEY}&language=en-US&page=1&include_adult=false&query=${stringToSearch}`;
-  const { data: movies } = await axios.get(queryString);
-  return movies;
-};
+export async function getMovieDetails(id) {
+  const query = `/movie/${id}`;
+  try {
+    const { data } = await instance.get(query);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-export const getMovieDetails = async movieId => {
-  const queryString = `movie/${movieId}$?api_key=${KEY}&language=en-US`;
-  const { data: movie } = await axios.get(queryString);
-  return movie;
-};
+export async function getMovieCast(id) {
+  const query = `/movie/${id}/credits`;
+  try {
+    const { data } = await instance.get(query);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-export const fetchTrendingMovies = async () => {
-  const queryString = `trending/movie/day?api_key=${KEY}`;
-  const { data: movies } = await axios.get(queryString);
-  return movies;
-};
+export async function getMovieReviews(id) {
+  const query = `/movie/${id}/reviews`;
+  try {
+    const { data } = await instance.get(query);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-export const getMovieCast = async movieId => {
-  const queryString = `movie/${movieId}/credits$?api_key={KEY}&language=en-US`;
-  const { data } = await axios.get(queryString);
-  return data;
-};
-
-export const getReviews = async movieId => {
-  const queryString = `movie/${movieId}/reviews$?api_key={KEY}&language=en-US`;
-  const { data } = await axios.get(queryString);
-  return data;
-};
+export async function searchMovie(queryString) {
+  const query = `/search/movie?query=${queryString}`;
+  try {
+    const { data } = await instance.get(query);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}

@@ -1,39 +1,109 @@
-.movieContainer {
+.img {
+    width: 270px;
+    height: 100%;
+}
+
+.imgWrap {
     display: flex;
-    /* align-items: center; */
-    justify-content: center;
+    margin-left: 100px;
+    margin-top: 30px;
 }
 
-.movieImg {
-    margin-right: 30px;
-}
-
-img {
-    width: 250px;
-}
-
-.link {
+.descrWrap {
     display: inline-block;
-    text-decoration: none;
-    padding: 12px;
-    font-weight: 500;
-    color: #2a363b;
-    font-size: 16px;
+    margin-left: 50px;
+    padding-right: 100px;
 }
 
-.active {
+.btn {
+    position: relative;
     display: inline-block;
-    text-decoration: none;
-    padding: 12px;
-    font-weight: 500;
-    color: #b92121;
+    padding: 9px 9px 9px 25px;
+    color: orange;
     font-size: 16px;
+    border: none;
+    background-color: #fff;
+    border-radius: 7px;
+    border: 1px solid orange;
+    margin: 20px 0 0 5px;
 }
 
-.notFound {
-    padding: 32px;
-    color: #b92121;
-    font-size: 25px;
-    font-weight: 500;
-    text-align: center;
+.btn:hover {
+    color: #272727;
+    cursor: pointer;
+    fill: #272727;
+}
+
+.btn::before {
+    content: '';
+    background-size: cover;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 5px;
+
+    top: 10px;
+}
+
+.btnList {
+    list-style: none;
+    display: flex;
+    margin-left: 76px;
+}
+
+.castBtn {
+    position: relative;
+    padding: 9px;
+    background-color: orange;
+    font-size: 16px;
+    border: none;
+    width: 110px;
+    color: #fff;
+    border-radius: 7px;
+}
+
+.castBtn::before {
+    content: '';
+    background-size: cover;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 10px;
+}
+
+.castBtn:hover {
+    background-color: rgb(255, 141, 2);
+    cursor: pointer;
+}
+
+.reviewsBtn {
+    position: relative;
+    padding: 9px 9px 9px 25px;
+    background-color: orange;
+    font-size: 16px;
+    width: 110px;
+    border: none;
+    color: #fff;
+    border-radius: 7px;
+    margin-left: 15px;
+}
+
+.reviewsBtn::before {
+    content: '';
+    background-size: cover;
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 10px;
+    top: 10px;
+}
+
+.reviewsBtn:hover {
+    background-color: rgb(255, 141, 2);
+    cursor: pointer;
+}
+
+.descrTitle {
+    font-size: 20px;
+    font-weight: 600;
 }

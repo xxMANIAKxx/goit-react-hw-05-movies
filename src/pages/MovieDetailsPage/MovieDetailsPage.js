@@ -1,109 +1,98 @@
-import Loader from 'components/Loader/Loader';
-import { useState, useEffect, lazy, Suspense } from 'react';
-import {
-  useParams,
-  NavLink,
-  useRouteMatch,
-  useLocation,
-  useHistory,
-  Switch,
-  Route,
-} from 'react-router-dom';
-import { getMovieDetails, IMAGE_URL } from '../../services/movies-api';
-import s from './MovieDetailsPage.module.css';
+import { useParams, Link, Outlet, useLocation } from 'react-router-dom';
+import { useState, useEffect, Suspense } from 'react';
+import { getMovieDetails } from '../../services/movies-api';
+import css from './MovieDetailsPage.module.css';
+import noMovieImg from '../../img/no-poster-available.jpg';
 
-const MovieReview = lazy(() =>
-  import('../MovieReview' /* webpackChunkName:"MovieReview" */)
-);
-const MovieCastView = lazy(() =>
-  import('../MovieCastView' /* webpackChunkName:"MovieCastView" */)
-);
-
-export default function MovieDetailsPage() {
-  const [movie, setMovie] = useState(null);
+const MovieDetails = () => {
   const { movieId } = useParams();
-  const history = useHistory();
-  const location = useLocation();
-  const { url, path } = useRouteMatch();
+
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getMovie = async () => {
-      const currentMovie = await getMovieDetails(movieId);
-
-      setMovie(currentMovie);
+    const getData = async () => {
+      try {
+        setLoading(true);
+        const data = await getMovieDetails(movieId);
+        setData(data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
-
-    getMovie();
+    getData();
   }, [movieId]);
 
-  const onGoBack = () => {
-    history.push(location?.state?.from?.location ?? '/movies');
+  const getYear = releaseDate => {
+    const date = new Date(releaseDate);
+    return date.getFullYear();
   };
+
+  const getGenres = arrGenres => {
+    return arrGenres.map(genre => genre.name).join(', ');
+  };
+
+  const location = useLocation();
+
+  const cameBack = location.state?.from ?? '/';
 
   return (
     <>
-      {!movie ? (
-        <div className={s.notFound}>This movie is not found</div>
+      <Link className={css.btn} to={cameBack}>
+        Go Back
+      </Link>
+      {loading ? (
+        'Loading...'
       ) : (
         <>
-          <button type="button" onClick={onGoBack}>
-            Go back
-          </button>
-          <div className={s.movieContainer}>
-            <div className={s.movieImg}>
+          <div className={css.imgWrap}>
+            {data.poster_path ? (
               <img
-                src={
-                  movie.poster_path
-                    ? IMAGE_URL + movie.poster_path
-                    : `https://bitsofco.de/content/images/2018/12/broken-1.png`
-                }
-                alt={movie.title}
-                widht=""
-                height=""
+                className={css.img}
+                alt={data.original_title}
+                src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
               />
-            </div>
+            ) : (
+              <img className={css.img} src={noMovieImg} alt="not available" />
+            )}
 
-            <div>
-              <h2>{movie.title}</h2>
-              <p>User Score: {`${movie.vote_average * 10}`}%</p>
-              <h3>Overview</h3>
-              <p>{`${movie.overview}`}</p>
-              <h3>Genres</h3>
-              <p>{`${movie.genres.map(genre => genre.name).join(' / ')}`}</p>
+            <div className={css.descrWrap}>
+              <h1>
+                {data.original_title} ({getYear(data.release_date)})
+              </h1>
+              <p className={css.descrTitle}>
+                User Score: {~~(data.vote_average * 10)}%
+              </p>
+              <p className={css.descrTitle}>Overview</p>
+              <p>{data.overview}</p>
+              <p className={css.descrTitle}>Genres</p>
+              <p>{getGenres(data.genres)}</p>
             </div>
           </div>
+          <div>
+            <ul className={css.btnList}>
+              <li>
+                <Link to="cast" state={{ from: cameBack }}>
+                  <button className={css.castBtn}>Cast</button>
+                </Link>
+              </li>
+              <li>
+                <Link to="reviews" state={{ from: cameBack }}>
+                  <button className={css.reviewsBtn}>Reviews</button>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <Suspense fallback={<div>Loading subpage...</div>}>
+            <Outlet />
+          </Suspense>
         </>
       )}
-      <hr />
-      <p>Additional information</p>
-      <nav>
-        <NavLink
-          to={{ pathname: `${url}/cast`, state: location.state }}
-          className={s.link}
-          activeClassName={s.active}
-        >
-          Cast
-        </NavLink>
-        <NavLink
-          to={{ pathname: `${url}/reviews`, state: location.state }}
-          className={s.link}
-          activeClassName={s.active}
-        >
-          Reviews
-        </NavLink>
-      </nav>
-
-      <Suspense fallback={<Loader />}>
-        <Switch>
-          <Route path={`${path}/cast`}>
-            <MovieCastView movieId={movieId} />
-          </Route>
-
-          <Route path={`${path}/reviews`}>
-            <MovieReview movieId={movieId} />
-          </Route>
-        </Switch>
-      </Suspense>
     </>
   );
-}
+};
+
+export default MovieDetails;
